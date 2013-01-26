@@ -137,6 +137,7 @@
         //creates the cell array and returns to caller
         getCells: function() {
             var _t = this,
+
                 cellCount = _t.config.colors.length,
                 $cells = $('<div/>'),
                 i,
