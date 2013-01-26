@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Simple jQuery Color Picker 1.0</title>
+    <style type="text/css">
+        body {font:11px Tahoma, Geneva, sans-serif}
+        #demoWrap {overflow:hidden;padding:30px;}
+
+		/*color picker core css*/
+	    .color-picker-input {background-image:url('color-swatch.png');background-repeat:no-repeat;line-height:0;font-size:0;cursor:pointer;text-indent:-999em;padding:0;border:1px solid #666}
+	    .color-picker-input.open,
+        .color-picker-input:focus {border-color:#0070CC !important;box-shadow:0 0 5px #c00}
+	    .color-picker-chooser {background:#fff;padding:1px;list-style:none;position:absolute;z-index:1000;border:1px solid #666;margin:0;}
+	    .color-picker-chooser li{float:left;cursor:pointer;}
+    </style>
+    
+</head>
+
+<body>
+
+<div id="demoWrap">
+	<h1>Simple jQuery Color Picker</h1>
+    <p>The goal was to make a simple and easy to use color picker without a lot of overhead.</p>
+    <h2>Features:</h2>
+    <ul>
+        <li>Keyboard support, fully accessible (up, down, left, right, tab, enter, esc)</li>
+        <li>Uses a text input, can be prepopulated with hex in value attribute</li>
+        <li>Supports multiple instances per page</li>
+        <li>Configurable through initialization or data attributes per element. Data attribute will override those passed to plugin which in turn will override defaults</li>
+    </ul>
+    <hr>
+    <h3>Example 1 - Default color picker</h3>
+    <p>
+        <input class="color-picker-input one" value="" />
+    </p>
+    <h3>Example 2 - Color picker with prepopulated value</h3>
+    <p>
+        <input class="color-picker-input one" value="c00" />
+    </p>
+    <h3>Example 3 - Color picker with override options set through data attribute</h3>
+    <p>
+        <input class="color-picker-input one" value="ccc" data-options="({cellHeight:80, cellWidth:80, columns:5})" />
+    </p>
+    <h3>Example 4 - Color picker with override options set through plugin function</h3>
+    <p>
+        <input class="color-picker-input two" value="" />
+    </p>
+    <hr>
+    <h2>Todo:</h2>
+    <ul>
+        <li>Allow positioning of background (left,right,center,custom)</li>
+        <li>Create/destroy picker on fly</li>
+        <li>Set picker position (top,right,bottom,left)</li>
+    </ul>
+
+</div>
+<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.simplecolorpicker.js"></script>
+
+    <script  type="text/javascript">
+        $(document).ready(function () {
+            $('.color-picker-input.one').simpleColorPicker();
+            $('.color-picker-input.two').simpleColorPicker({cellHeight:40, cellWidth:40, columns:5, inputWidth: 150,inputHeight:150,iconPosition:'left'});
+        });
+    </script>
+
+</body>
+</html>
