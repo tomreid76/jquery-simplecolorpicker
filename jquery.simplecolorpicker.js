@@ -39,7 +39,7 @@
                 {name: 'black',  hex: '000000'},
                 {name: 'blue',   hex: '0000dd'}
             ],
-            iconPosition: 'center',
+            iconPosition: 'right',
             animationSpeed: 50, //slide animation speed, set to 0 for no anim
             pickerClass: 'color-picker-chooser', //css class for the picker
             textCurrentColor: 'Current color: ' //text shown in title attribute of input once a selection is made

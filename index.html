@@ -39,7 +39,7 @@
     </p>
     <h3>Example 3 - Color picker with override options set through data attribute</h3>
     <p>
-        <input class="color-picker-input one" value="ccc" data-options="({cellHeight:80, cellWidth:80, columns:5})" />
+        <input class="color-picker-input one" value="ccc" data-options="({cellHeight:80, cellWidth:80, columns:5, inputWidth:150})" />
     </p>
     <h3>Example 4 - Color picker with override options set through plugin function</h3>
     <p>
@@ -60,7 +60,7 @@
     <script  type="text/javascript">
         $(document).ready(function () {
             $('.color-picker-input.one').simpleColorPicker();
-            $('.color-picker-input.two').simpleColorPicker({cellHeight:40, cellWidth:40, columns:5, inputWidth: 150,inputHeight:150,iconPosition:'left'});
+            $('.color-picker-input.two').simpleColorPicker({cellHeight:40, cellWidth:40, columns:5, inputWidth: 75,inputHeight:75,iconPosition:'center'});
         });
     </script>
 
