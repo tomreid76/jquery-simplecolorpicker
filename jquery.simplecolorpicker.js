@@ -5,13 +5,13 @@
  * Copyright 2013 Tom Reid
  * Released under the MIT license
  */
-;(function( $, window, document, undefined ){
+;(function ($, window) {
 
     // our plugin constructor
-    var SimpleColorPicker = function( elem, options ){
-        this.$input = $(elem);
-        this.options = options;
-        this.metadata = eval(this.$input.data( 'options' ));
+    var SimpleColorPicker = function (el, opts) {
+        this.$el = $(el);
+        this.options = opts;
+        this.metadata = eval(this.$el.data('options'));
     };
 
     // the plugin prototype
@@ -20,13 +20,13 @@
         //default options
         defaults: {
             defaultColor: {name: 'default (white)', hex: 'fff'}, //color used if input does not have a hex in the value attr.
-            boxBorderWidth: 1, //border width for input and picker box
+            borderWidth: 1, //border width for input and picker box
             cellWidth: 20, //width of the color cells
             cellHeight: 20, //height of the color cells
             cellBorder: 1, //border width of the color cells
-            inputWidth: 25, //overall width of the picker box
-            inputHeight: 25, //height of the input
-            columns: 10, 	// # of columns
+            elWidth: 25, //overall width of the picker box
+            elHeight: 25, //height of the input
+            cols: 5,// # of cols
             colors: [
                 {name: 'brown',  hex: '7a4100'},
                 {name: 'green',  hex: '00aa00'},
@@ -39,13 +39,13 @@
                 {name: 'black',  hex: '000000'},
                 {name: 'blue',   hex: '0000dd'}
             ],
-            iconPosition: 'right',
-            animationSpeed: 50, //slide animation speed, set to 0 for no anim
-            pickerClass: 'color-picker-chooser', //css class for the picker
+            iconPos: 'right',
+            aniSpeed: 50, //slide animation speed, set to 0 for no anim
+            lsClass: 'color-picker-chooser', //css class for the picker
             textCurrentColor: 'Current color: ' //text shown in title attribute of input once a selection is made
         },
 
-        init: function() {
+        init: function () {
 
             //reference to this
             var _t = this;
@@ -54,31 +54,31 @@
             _t.config = $.extend(true, {}, _t.defaults, _t.options, _t.metadata);
 
             //calculate dimensions of picker dropdown
-            _t.config.totalWidth = _t.config.columns * (_t.config.cellWidth + (2 * _t.config.cellBorder));
-            _t.config.totalHeight = Math.ceil((_t.config.colors.length) / _t.config.columns) * (_t.config.cellHeight + (2 * _t.config.cellBorder));
+            _t.config.totalWidth = _t.config.cols * (_t.config.cellWidth + (2 * _t.config.cellBorder));
+            _t.config.totalHeight = Math.ceil((_t.config.colors.length) / _t.config.cols) * (_t.config.cellHeight + (2 * _t.config.cellBorder));
 
             //set CSS, bg-color, etc...
             _t.setupInputElement();
 
             //get the picker
-            _t.$picker = _t.getPickerMenu();
+            _t.$cp = _t.getPickerMenu();
 
             //append the picker to body
-            $('body').append(_t.$picker);
+            $('body').append(_t.$cp);
 
             //bind events
             _t.bindPickerEvents();
 
             //bind resize re-position picker
             $(window).resize(function () {
-                _t.setPickerPosition(_t.$picker);
+                _t.setPickerPosition(_t.$cp);
             });
             return _t;
         },
 
-        getIconPosition: function() {
+        geticonPos: function() {
             var pos;
-            switch (this.config.iconPosition) {
+            switch (this.config.iconPos) {
                 case 'center':
                     pos = 'center';
                     break;
@@ -87,7 +87,7 @@
                     break;
                 case 'right':
                 default:
-                    pos = (this.config.inputWidth - 20) + 'px';
+                    pos = (this.config.elWidth - 20) + 'px';
                     break;
             }
             return pos;
@@ -95,41 +95,41 @@
 
         setupInputElement: function() {
             var _t = this,
-                defaultColor = (_t.$input.val() && _t.$input.val() !== '') ? _t.$input.val() : _t.config.defaultColor.hex;
-            _t.$input.css({
+                defaultColor = (_t.$el.val() && _t.$el.val() !== '') ? _t.$el.val() : _t.config.defaultColor.hex;
+            _t.$el.css({
                 'backgroundColor': '#' + defaultColor,
-                'backgroundPosition': _t.getIconPosition(),
-                'borderWidth': _t.config.boxBorderWidth + 'px',
-                'width': _t.config.inputWidth + 'px',
-                'height': _t.config.inputHeight + 'px',
-                'color': '#' + _t.$input.val()
+                'backgroundPosition': _t.geticonPos(),
+                'borderWidth': _t.config.borderWidth + 'px',
+                'width': _t.config.elWidth + 'px',
+                'height': _t.config.elHeight + 'px',
+                'color': '#' + _t.$el.val()
             });
         },
 
         //close picker
         close: function() {
             var _t = this;
-            _t.$picker.slideUp(_t.config.animationSpeed).find('a').removeClass('selected');
-            _t.$input.removeClass('open').focus();
+            _t.$cp.slideUp(_t.config.aniSpeed).find('li').removeClass('selected');
+            _t.$el.removeClass('open').focus();
             $(document).off('mouseup.cp' + _t.colorPickerInstance, 'html');
         },
 
         //open picker
         open: function() {
             var _t = this;
-            _t.setPickerPosition(_t.$picker); //reset picker position
-            _t.$input.addClass('open');
-            _t.$picker.slideDown(_t.config.animationSpeed);
+            _t.setPickerPosition(_t.$cp); //reset picker position
+            _t.$el.addClass('open');
+            _t.$cp.slideDown(_t.config.aniSpeed);
             $(document).on('mouseup.cp' + _t.colorPickerInstance, 'html',  function() {_t.close.call(_t)});
         },
 
         //set position of picker to attach to bot-left of input
-        setPickerPosition: function($picker) {
+        setPickerPosition: function($cp) {
             var _t = this,
-                offset = _t.$input.offset(),
-                height = _t.$input.height();
-            $picker.css({
-                'top': offset.top + height + _t.config.boxBorderWidth,
+                offset = _t.$el.offset(),
+                height = _t.$el.height();
+            $cp.css({
+                'top': offset.top + height + _t.config.borderWidth,
                 'left': offset.left
             });
         },
@@ -148,8 +148,7 @@
                 $cell.css({
                     'width': _t.config.cellWidth + 'px',
                     'height': _t.config.cellHeight + 'px',
-                    'border': _t.config.cellBorder + 'px solid #fff',
-                    'lineHeight': _t.config.cellHeight + 'px',
+                    'borderWidth': _t.config.cellBorder + 'px',
                     'backgroundColor': '#' + _t.config.colors[i].hex
                 });
 
@@ -162,66 +161,66 @@
         getPickerMenu: function() {
             var _t = this;
 
-            _t.colorPickerInstance = $('.' + _t.config.pickerClass).length + 1;
-            var $picker = $("<ul class='" + _t.config.pickerClass + "' id='cp-" + _t.colorPickerInstance + "' />"),
+            _t.colorPickerInstance = $('.' + _t.config.lsClass).length + 1;
+            var $cp = $("<ul class='" + _t.config.lsClass + "' id='cp-" + _t.colorPickerInstance + "' />"),
                 $cells;
 
-            _t.setPickerPosition($picker);
-            $picker.css({
-                'borderWidth': _t.config.boxBorderWidth + 'px',
+            _t.setPickerPosition($cp);
+            $cp.css({
+                'borderWidth': _t.config.borderWidth + 'px',
                 'width': _t.config.totalWidth + 'px',
                 'height': _t.config.totalHeight + 'px',
                 'display': 'none'
             });
             //get cells
-            $cells = _t.getCells($picker);
+            $cells = _t.getCells();
             //append cells
-            $picker.append($cells.children());
+            $cp.append($cells.children());
             //return picker
-            return $picker;
+            return $cp;
         },
 
         //bind events on input
         bindPickerEvents: function() {
             var _t = this,
-                $cell = _t.$picker.find('li');
+                $cell = _t.$cp.find('li');
 
-            _t.$input.bind({
-                mouseup: function (event) {
-                    (_t.$picker.is(':visible')) ? _t.close() : _t.open();
-                    event.stopPropagation();
+            _t.$el.bind({
+                mouseup: function (e) {
+                    (_t.$cp.is(':visible')) ? _t.close() : _t.open();
+                    e.stopPropagation();
                 },
-                keydown: function (event) {
-                    switch (event.which) {
+                keydown: function (e) {
+                    switch (e.which) {
                         //enter key
                         case 13:
-                            _t.$input.trigger('mouseup');
+                            _t.$el.trigger('mouseup');
                             break;
                         //escape
                         case 27:
                             _t.close();
-                            event.stopPropagation();
+                            e.stopPropagation();
                             break;
                         //down arrow
                         case 40:
                             _t.open();
-                            _t.$picker.find('li:first').focus().addClass('selected');
+                            _t.$cp.find('li:first').focus().addClass('selected');
                             break;
                         case 9:
-                            if (_t.$picker.is(':visible')) {
-                                _t.$picker.find('li:first').focus().addClass('selected');
-                                event.preventDefault();
+                            if (_t.$cp.is(':visible')) {
+                                _t.$cp.find('li:first').focus().addClass('selected');
+                                e.preventDefault();
                             }
                             break;
                     }
                 }
             });
             $cell.bind({
-                keydown: function (event) {
+                keydown: function (e) {
                     var $t = $(this),
                         $all = $t.siblings().andSelf();
 
-                    switch (event.which) {
+                    switch (e.which) {
                         //enter key
                         case 13:
                             $t.trigger('mouseup');
@@ -231,7 +230,7 @@
                             $t.removeClass('selected');
 
                             _t.close();
-                            event.stopPropagation();
+                            e.stopPropagation();
                             break;
                         //left arrow
                         case 37:
@@ -243,7 +242,7 @@
                             break;
                         //up arrow
                         case 38:
-                            var pos = $all.index($t) - _t.config.columns;
+                            var pos = $all.index($t) - _t.config.cols;
                             if (pos > -1) {
                                 $t.removeClass('selected');
                                 $($all[pos]).addClass('selected').focus();
@@ -262,45 +261,39 @@
                         break;
                         //down arrow
                         case 40:
-                            var newPos = $all.index($t) + _t.config.columns;
+                            var newPos = $all.index($t) + _t.config.cols;
                             if (newPos < $all.length) {
                                 $t.removeClass('selected');
                                 $($all[newPos]).addClass('selected').focus();
-                                //if includeDefault is true
-                            } else if (_t.config.includeDefault && (newPos < $all.length + (_t.config.columns - 1))) {
-                                $t.removeClass('selected');
-                                $all.last().addClass('selected').focus();
                             }
                             break;
 
                     }
                     return false;
                 },
-                mouseup: function (event) {
+                mouseup: function (e) {
                     var $this = $(this);
                     $this.siblings().andSelf().removeClass('selected');
                     //chosen color
                     var newColor = $this.attr('data-color'),
                         newColorName = $this.attr('title');
                     //update input
-                    _t.$input.val(newColor).removeClass('open').focus().css({
+                    _t.$el.val(newColor).removeClass('open').focus().css({
                         'backgroundColor': '#' + newColor,
                         'color': '#' + newColor
                     }).attr('title', _t.config.textCurrentColor + newColorName);
                     _t.close();
-                    event.stopPropagation();
+                    e.stopPropagation();
                     return false;
                 }
             });
         }
     };
 
-    //Plugin.defaults = Plugin.prototype.defaults;
-
-    $.fn.simpleColorPicker = function(options) {
+    $.fn.simpleColorPicker = function(opts) {
         return this.each(function() {
-            new SimpleColorPicker(this, options).init();
+            new SimpleColorPicker(this, opts).init();
         });
     };
 
-})( jQuery, window , document );
+})(jQuery, window);

@@ -10,8 +10,9 @@
 	    .color-picker-input {background-image:url('color-swatch.png');background-repeat:no-repeat;line-height:0;font-size:0;cursor:pointer;text-indent:-999em;padding:0;border:1px solid #666}
 	    .color-picker-input.open,
         .color-picker-input:focus {border-color:#0070CC !important;box-shadow:0 0 5px #c00}
-	    .color-picker-chooser {background:#fff;padding:1px;list-style:none;position:absolute;z-index:1000;border:1px solid #666;margin:0;}
-	    .color-picker-chooser li{float:left;cursor:pointer;}
+	    .color-picker-chooser {background:#fff;padding:1px;list-style:none;position:absolute;z-index:1000;border-color:#666;margin:0;border-style:solid}
+	    .color-picker-chooser li{float:left;cursor:pointer;border-style:solid;border-color:#fff;}
+        .color-picker-chooser li.selected, .color-picker-chooser li:hover, .color-picker-chooser li:focus {border-color:#fff;outline:none;-webkit-transform:scale(1.3);}
     </style>
     
 </head>
@@ -39,7 +40,7 @@
     </p>
     <h3>Example 3 - Color picker with override options set through data attribute</h3>
     <p>
-        <input class="color-picker-input one" value="ccc" data-options="({cellHeight:80, cellWidth:80, columns:5, inputWidth:150})" />
+        <input class="color-picker-input one" value="ccc" data-options="({cellHeight:15, cellWidth:28, cols:5, elWidth:152, iconPos: 'left'})" />
     </p>
     <h3>Example 4 - Color picker with override options set through plugin function</h3>
     <p>
@@ -55,12 +56,12 @@
 
 </div>
 <script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript" src="jquery.simplecolorpicker.js"></script>
+    <script type="text/javascript" src="jquery.simplecolorpicker.min.js"></script>
 
     <script  type="text/javascript">
         $(document).ready(function () {
             $('.color-picker-input.one').simpleColorPicker();
-            $('.color-picker-input.two').simpleColorPicker({cellHeight:40, cellWidth:40, columns:5, inputWidth: 75,inputHeight:75,iconPosition:'center'});
+            $('.color-picker-input.two').simpleColorPicker({cellHeight:40, cellWidth:40, columns:5, elWidth: 75,elHeight:75,iconPos:'center'});
         });
     </script>
 
